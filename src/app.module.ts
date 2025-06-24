@@ -5,10 +5,12 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 import { AppConfig, DatabaseConfig } from "./config/index.config";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserModule } from "./user/user-module";
+import { FoodItemModule } from "./food-item/food-item.module";
+import { CartModule } from "./cart/cart.module";
+import { OrderModule } from "./order/order.module";
 
 @Module({
   imports: [
-    UserModule,
     ConfigModule.forRoot({
       isGlobal: true,
       cache: true,
@@ -21,6 +23,10 @@ import { UserModule } from "./user/user-module";
       }),
       inject: [ConfigService],
     }),
+    UserModule,
+    FoodItemModule,
+    CartModule,
+    OrderModule,
   ],
   controllers: [AppController],
   providers: [AppService],
