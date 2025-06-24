@@ -18,8 +18,7 @@ export class ConsumerService {
     if( !userPassword ) {
       throw new UnauthorizedException('Invalid credentials');
     }
-    return true;
-
+    return userEmail;
   }
 
   public async signUp(consumerSignUpData: ConsumerSignUpDataDto) {
