@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get } from '@nestjs/common';
+import { Controller, Post, Body, Get, Query } from '@nestjs/common';
 import { FoodItemService } from '../service/food-item.service';
 import { CreateFoodItemDto } from '../dto/food-item.dto';
 import { CreateProductDto } from '../dto/product.dto';
@@ -20,5 +20,10 @@ export class FoodItemController {
   @Get('home')
   async getHomeFoodItems() {
     return this.foodItemService.getAllFoodItems();
+  }
+
+  @Get('search')
+  async searchFoodItems(@Query('q') query: string) {
+    return this.foodItemService.searchFoodItems(query);
   }
 }

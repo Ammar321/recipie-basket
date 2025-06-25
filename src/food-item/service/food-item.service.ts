@@ -1,6 +1,6 @@
 import { Injectable, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { FoodItemEntity } from '../entities/food-item.entity';
 import { CreateFoodItemDto } from '../dto/food-item.dto';
 import { FoodIngredientEntity } from '../entities/food-ingredients.entity';
@@ -93,4 +93,12 @@ export class FoodItemService {
   async findOneProduct(id: string) {
     return this.productRepo.findOneBy({ id });
   }
+
+  async searchFoodItems(query: string) {
+  return this.foodItemRepo.find({
+    where: {
+      name: ILike(`%${query}%`),
+    },
+  });
+}
 }
