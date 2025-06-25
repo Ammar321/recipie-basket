@@ -9,6 +9,7 @@ export class CreateFoodItemDto {
   food_description: string;
   food_images: string[];
   food_recipe: string;
+  food_price: number;
   prep_time_minutes: number;
   servings: number;
   cuisine_type: string;

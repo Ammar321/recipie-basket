@@ -31,6 +31,7 @@ export class FoodItemService {
 
     const foodItem = this.foodItemRepo.create({
       name: createFoodItemDto.food_name,
+      price: createFoodItemDto.food_price,
       description: createFoodItemDto.food_description,
       images: createFoodItemDto.food_images,
       recipe: createFoodItemDto.food_recipe,

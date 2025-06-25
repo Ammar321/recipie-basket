@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn } from 'typeorm';
-import { IsString, IsNotEmpty, IsInt, IsArray } from 'class-validator';
+import { IsString, IsNotEmpty, IsInt, IsArray, IsNumber } from 'class-validator';
 import { FoodIngredientEntity } from './food-ingredients.entity';
 import { Exclude } from 'class-transformer';
 
@@ -29,6 +29,10 @@ export class FoodItemEntity {
   @Column({ name: 'prep_time_minutes' })
   @IsInt()
   prepTimeInMinutes: number;
+
+  @Column({ name: 'price' })
+  @IsNumber()
+  price: number;
 
   @Column({ name: 'servings' })
   @IsInt()
