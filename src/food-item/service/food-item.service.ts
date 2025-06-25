@@ -69,12 +69,8 @@ export class FoodItemService {
     }
   }
 
-  async getAllFoddItems() {
-    const foodItems = await this.foodItemRepo.find({ 
-       relations: ['ingredients', 'ingredients.product'],
-       order: { createdAt: 'DESC' },
-     });
-    return plainToInstance(FoodItemEntity, foodItems, { excludeExtraneousValues: true });
+  async getAllFoodItems() {
+    return this.foodItemRepo.find();
   }
 
   async createProduct( createProductDto: CreateProductDto ){

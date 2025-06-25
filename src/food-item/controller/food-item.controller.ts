@@ -19,6 +19,6 @@ export class FoodItemController {
   
   @Get('home')
   async getHomeFoodItems() {
-    return this.foodItemService.getAllFoddItems();
+    return this.foodItemService.getAllFoodItems();
   }
 }
