@@ -89,13 +89,10 @@ export class CartService {
   }
 
   async getCart(userId: string) {
-    const cartItems = await this.cartRepo.find({
-      where: { user: { id: userId } },
-      relations: ['foodItem'],
-      order: { createdAt: 'DESC' }
+     return this.cartRepo.find({
+      where: { user: { id: userId } }
     });
 
-    return plainToInstance(CartEntity, cartItems, { excludeExtraneousValues: true });
   }
 
   async clearCart(userId: string) {
