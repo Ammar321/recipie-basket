@@ -30,7 +30,7 @@ export class FoodItemEntity {
   @IsInt()
   prepTimeInMinutes: number;
 
-  @Column({ name: 'price' })
+  @Column({type: 'integer', name: 'price', nullable: true, default: 0 })
   @IsNumber()
   price: number;
 
