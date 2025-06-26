@@ -81,12 +81,23 @@ export class CartService {
   cartItem.quantity = updateCartItemDto.quantity;
   const updatedCartItem = await this.cartRepo.save(cartItem);
 
-  const totalPrice = cartItem.foodItem.price * cartItem.quantity;
+  const itemTotalPrice = cartItem.foodItem.price * cartItem.quantity;
+
+  // 🧮 Fetch all cart items to calculate cart total
+  const allCartItems = await this.cartRepo.find({
+    where: { user: { id: userId } },
+    relations: ['foodItem'],
+  });
+
+  const cartTotal = allCartItems.reduce((sum, item) => {
+    return sum + item.foodItem.price * item.quantity;
+  }, 0);
 
   return {
     ...plainToInstance(CartEntity, updatedCartItem, { excludeExtraneousValues: true }),
     foodItem: cartItem.foodItem,
-    totalPrice,
+    totalPrice: itemTotalPrice,
+    cartTotal,
   };
 }
 
