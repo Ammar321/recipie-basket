@@ -43,8 +43,6 @@ export class ConsumerService {
  public async userInfo( consumerDataInfo: UserDataDto) {
 
     return await this.userRepository.createConsumerInfo({
-      email: consumerDataInfo.email,
-      fullName: consumerDataInfo.fullName,
       address: consumerDataInfo.address,
       city: consumerDataInfo.city,
       phNumber: consumerDataInfo.phNumber

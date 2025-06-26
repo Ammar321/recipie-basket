@@ -9,8 +9,6 @@ export class ConsumerSignUpDataDto {
 }
 
 export class UserDataDto {
-  email: string;
-  fullName: string;
   address: string;
   phNumber?: string;
   city: string;
