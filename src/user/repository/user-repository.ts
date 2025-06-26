@@ -28,8 +28,22 @@ export class UserRepoistory {
     }
   }
 
+   public async findUser(userId: string) {
+  try {
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+    return user;
+  } catch (error) {
+    console.error('Error finding user:', error);
+    throw error;
+  }
+}
+
   public async findPassword( password: string ) {
     const userPassword = await this.userRepository.findOne( { where: { password } } );
     return userPassword
   }
+
+  public async saveUser(user: User) {
+  return await this.userRepository.save(user);
+}
 }

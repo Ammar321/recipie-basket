@@ -33,20 +33,20 @@ export class ConsumerService {
       email: consumerSignUpData.email,
       fullName: consumerSignUpData.fullName,
       password: consumerSignUpData.password,
-      address: consumerSignUpData.address,
-      city: consumerSignUpData.city,
-      phNumber: consumerSignUpData.phNumber,
       createdAt: new Date(),
     });
   }
 
- public async userInfo( consumerDataInfo: UserDataDto) {
+  public async updateUserInfo(userId: string, consumerDataInfo: UserDataDto) {
+     const user = await this.userRepository.findUser( userId )
+    if (!user) {
+       throw new BadRequestException('User not found');
+     }
+     user.address = consumerDataInfo.address;
+     user.city = consumerDataInfo.city;
+     user.phNumber = consumerDataInfo.phNumber;
 
-    return await this.userRepository.createConsumerInfo({
-      address: consumerDataInfo.address,
-      city: consumerDataInfo.city,
-      phNumber: consumerDataInfo.phNumber
-    });
-  }
+     return await this.userRepository.saveUser(user);
+   }
 
 }
