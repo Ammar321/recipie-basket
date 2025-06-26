@@ -1,7 +1,7 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../entities/user-entity';
 import { Repository } from 'typeorm';
-import { ConsumerSignUpDataDto } from '../dto/consumer.dto';
+import { ConsumerSignUpDataDto, UserDataDto } from '../dto/consumer.dto';
 export class UserRepoistory {
   constructor(
     @InjectRepository(User)
@@ -9,6 +9,11 @@ export class UserRepoistory {
   ) {}
 
   async createConsumer(consumerSignUpData: ConsumerSignUpDataDto) {
+    const consumer = this.userRepository.create(consumerSignUpData);
+    return this.userRepository.save(consumer);
+  }
+
+  async createConsumerInfo(consumerSignUpData: UserDataDto) {
     const consumer = this.userRepository.create(consumerSignUpData);
     return this.userRepository.save(consumer);
   }

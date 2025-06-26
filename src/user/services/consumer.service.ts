@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
-import { ConsumerSignUpDataDto } from '../dto/consumer.dto';
+import { ConsumerSignUpDataDto, UserDataDto } from '../dto/consumer.dto';
 import { UserRepoistory } from '../repository/user-repository';
 import { ConsumerLoginDataDto } from '../dto/consumer-login.dto';
 
@@ -33,7 +33,22 @@ export class ConsumerService {
       email: consumerSignUpData.email,
       fullName: consumerSignUpData.fullName,
       password: consumerSignUpData.password,
+      address: consumerSignUpData.address,
+      city: consumerSignUpData.city,
+      phNumber: consumerSignUpData.phNumber,
       createdAt: new Date(),
     });
   }
+
+ public async userInfo( consumerDataInfo: UserDataDto) {
+
+    return await this.userRepository.createConsumerInfo({
+      email: consumerDataInfo.email,
+      fullName: consumerDataInfo.fullName,
+      address: consumerDataInfo.address,
+      city: consumerDataInfo.city,
+      phNumber: consumerDataInfo.phNumber
+    });
+  }
+
 }

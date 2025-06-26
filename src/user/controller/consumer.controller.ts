@@ -1,5 +1,5 @@
 import { Post, Controller, Body, BadRequestException, Get } from '@nestjs/common';
-import { ConsumerSignUpDataDto } from '../dto/consumer.dto';
+import { ConsumerSignUpDataDto, UserDataDto } from '../dto/consumer.dto';
 import { ConsumerService } from '../services/consumer.service';
 import { ConsumerLoginDataDto } from '../dto/consumer-login.dto';
 
@@ -27,6 +27,18 @@ export class ConsumerController {
     } catch {
       throw new BadRequestException(
         'Failed to sign up. Please check the input data and try again.',
+      );
+    }
+  }
+
+   @Post('user-data')
+  public async getUserInfo(
+    @Body() consumerDataInfo: UserDataDto ) {
+    try {
+      return await this.consumerService.userInfo( consumerDataInfo );
+    } catch {
+      throw new BadRequestException(
+        'Failed to get user info. Please check the input data and try again.',
       );
     }
   }

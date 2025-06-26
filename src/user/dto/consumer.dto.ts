@@ -3,4 +3,15 @@ export class ConsumerSignUpDataDto {
   email: string;
   fullName: string;
   password: string;
+  address?: string;
+  phNumber?: string;
+  city?: string;
+}
+
+export class UserDataDto {
+  email: string;
+  fullName: string;
+  address: string;
+  phNumber?: string;
+  city: string;
 }

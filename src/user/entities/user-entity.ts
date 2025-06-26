@@ -30,4 +30,12 @@ export class User {
   @MinLength(8)
   @IsNotEmpty()
   password: string;
+
+  @Column({ name: 'ph_number', default: null })
+  @IsString()
+  phNumber: string;
+
+  @Column({ name: 'city', default: null })
+  @IsString()
+  city: string;
 }
