@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { IsInt, IsNotEmpty, Min, IsNumber } from 'class-validator';
 import { OrderEntity } from './order.entity';
-import { ProductEntity } from '../../food-item/entities/product.entity';
+import { FoodItemEntity } from 'src/food-item/entities/food-item.entity';
 
 @Entity('order_items')
 export class OrderItemEntity {
@@ -11,8 +11,8 @@ export class OrderItemEntity {
   @ManyToOne(() => OrderEntity, order => order.orderItems)
   order: OrderEntity;
 
-  @ManyToOne(() => ProductEntity)
-  product: ProductEntity;
+  @ManyToOne(() => FoodItemEntity)
+  foodItem: FoodItemEntity;
 
   @Column({ name: 'quantity' })
   @IsInt()

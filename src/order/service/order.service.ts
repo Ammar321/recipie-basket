@@ -7,6 +7,7 @@ import { ProductEntity } from '../../food-item/entities/product.entity';
 import { User } from '../../user/entities/user-entity';
 import { CreateOrderDto, UpdateOrderStatusDto, UpdateOrderDto, AddOrderItemDto, UpdateOrderItemDto } from '../dto/order.dto';
 import { plainToInstance } from 'class-transformer';
+import { FoodItemEntity } from 'src/food-item/entities/food-item.entity';
 
 @Injectable()
 export class OrderService {
@@ -17,6 +18,8 @@ export class OrderService {
     private readonly orderItemRepo: Repository<OrderItemEntity>,
     @InjectRepository(ProductEntity)
     private readonly productRepo: Repository<ProductEntity>,
+    @InjectRepository(FoodItemEntity)
+    private readonly foodItemRepo: Repository<ProductEntity>,
     @InjectRepository(User)
     private readonly userRepo: Repository<User>,
   ) {}
@@ -42,18 +45,18 @@ export class OrderService {
     const orderItems: OrderItemEntity[] = [];
 
     for (const itemDto of createOrderDto.orderItems) {
-      const product = await this.productRepo.findOneBy({ id: itemDto.productId });
-      if (!product) {
-        throw new NotFoundException(`Product with ID ${itemDto.productId} not found`);
+      const foodItem = await this.foodItemRepo.findOneBy({ id: itemDto.foodItemId });
+      if (!foodItem) {
+        throw new NotFoundException(`Product with ID ${itemDto.foodItemId} not found`);
       }
 
-      const itemTotal = product.price * itemDto.quantity;
+      const itemTotal = foodItem.price * itemDto.quantity;
       totalAmount += itemTotal;
 
       const orderItem = this.orderItemRepo.create({
-        product,
+        foodItem,
         quantity: itemDto.quantity,
-        unitPrice: product.price,
+        unitPrice: foodItem.price,
         totalPrice: itemTotal
       });
       orderItems.push(orderItem);
@@ -116,17 +119,17 @@ export class OrderService {
       throw new BadRequestException('Cannot add items to order that is not in pending status');
     }
 
-    const product = await this.productRepo.findOneBy({ id: addOrderItemDto.productId });
-    if (!product) {
+    const foodItem = await this.foodItemRepo.findOneBy({ id: addOrderItemDto.foodItemId });
+    if (!foodItem) {
       throw new NotFoundException('Product not found');
     }
 
-    const itemTotal = product.price * addOrderItemDto.quantity;
+    const itemTotal = foodItem.price * addOrderItemDto.quantity;
     const orderItem = this.orderItemRepo.create({
       order,
-      product,
+      foodItem,
       quantity: addOrderItemDto.quantity,
-      unitPrice: product.price,
+      unitPrice: foodItem.price,
       totalPrice: itemTotal
     });
 

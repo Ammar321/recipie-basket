@@ -5,7 +5,7 @@ import { OrderStatus } from '../entities/order.entity';
 export class OrderItemDto {
   @IsString()
   @IsNotEmpty()
-  productId: string;
+  foodItemId: string;
 
   @IsInt()
   @Min(1)
@@ -47,7 +47,7 @@ export class UpdateOrderDto {
 export class AddOrderItemDto {
   @IsString()
   @IsNotEmpty()
-  productId: string;
+  foodItemId: string;
 
   @IsInt()
   @Min(1)

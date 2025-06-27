@@ -6,6 +6,8 @@ import { FoodIngredientEntity } from "src/food-item/entities/food-ingredients.en
 import { FoodItemEntity } from "src/food-item/entities/food-item.entity";
 import { ProductEntity } from "src/food-item/entities/product.entity";
 import { CartEntity } from "src/cart/entities/cart.entity";
+import { OrderEntity } from "src/order/entities/order.entity";
+import { OrderItemEntity } from "src/order/entities/order-item.entity";
 
 config();
 
@@ -18,7 +20,7 @@ export default new DataSource({
   username: configService.get("DB_USERNAME"),
   password: configService.get("DB_PASSWORD"),
   database: configService.get("DB_DATABASE"),
-  entities: [User, FoodIngredientEntity, FoodItemEntity, ProductEntity, CartEntity],
+  entities: [User, FoodIngredientEntity, FoodItemEntity, ProductEntity, CartEntity, OrderEntity, OrderItemEntity],
   synchronize: false,
   logging: configService.get("nodenv") === "development",
   migrations: [`${__dirname}/migrations/*{.ts,.js}`],
