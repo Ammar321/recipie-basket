@@ -207,22 +207,18 @@ export class OrderService {
   }
 
   async getUserOrders(userId: string) {
-    const orders = await this.orderRepo.find({
+     return this.orderRepo.find({
       where: { user: { id: userId } },
-      relations: ['orderItems', 'orderItems.product'],
+      relations: ['orderItems', 'orderItems.foodItem'],
       order: { createdAt: 'DESC' }
     });
-
-    return plainToInstance(OrderEntity, orders, { excludeExtraneousValues: true });
   }
 
   async getAllOrders() {
-    const orders = await this.orderRepo.find({
-      relations: ['orderItems', 'orderItems.product', 'user'],
+      return this.orderRepo.find({
+      relations: ['orderItems', 'orderItems.foodItem', 'user'],
       order: { createdAt: 'DESC' }
     });
-
-    return plainToInstance(OrderEntity, orders, { excludeExtraneousValues: true });
   }
 
   async cancelOrder(orderId: string) {
