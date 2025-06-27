@@ -10,7 +10,6 @@ export class FoodIngredientEntity {
   id: string;
 
   @ManyToOne(() => FoodItemEntity, (foodItem) => foodItem.ingredients)
-  @Exclude()
   foodItem: FoodItemEntity;
 
   @ManyToOne(() => ProductEntity)
