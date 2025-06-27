@@ -24,7 +24,10 @@ export class CartService {
     throw new NotFoundException('User not found');
   }
 
-  const foodItem = await this.foodItemRepo.findOneBy({ id: addToCartDto.foodItemId });
+  const foodItem = await this.foodItemRepo.findOne({
+    where: { id: addToCartDto.foodItemId },
+    relations: ['ingredients', 'ingredients.product'],
+  });
   if (!foodItem) {
     throw new NotFoundException('Food item not found');
   }
