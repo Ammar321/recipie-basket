@@ -26,8 +26,9 @@ export class CartService {
 
   const foodItem = await this.foodItemRepo.findOne({
     where: { id: addToCartDto.foodItemId },
-    relations: ['ingredients', 'ingredients.product'],
+    relations: ['ingredients', 'ingredients.product'], // Fetch full food item
   });
+
   if (!foodItem) {
     throw new NotFoundException('Food item not found');
   }
@@ -43,11 +44,13 @@ export class CartService {
   if (existingCartItem) {
     existingCartItem.quantity += addToCartDto.quantity;
     const updatedCartItem = await this.cartRepo.save(existingCartItem);
-    const totalPrice = existingCartItem.foodItem.price * existingCartItem.quantity;
+    const totalPrice = foodItem.price * updatedCartItem.quantity;
 
     return {
-      ...plainToInstance(CartEntity, updatedCartItem, { excludeExtraneousValues: true }),
-      foodItem: existingCartItem.foodItem,
+      ...plainToInstance(CartEntity, updatedCartItem, {
+        excludeExtraneousValues: true,
+      }),
+      foodItem, // ✅ use the rich object with ingredients
       totalPrice,
     };
   }
@@ -62,8 +65,10 @@ export class CartService {
   const totalPrice = foodItem.price * addToCartDto.quantity;
 
   return {
-    ...plainToInstance(CartEntity, savedCartItem, { excludeExtraneousValues: true }),
-    foodItem,
+    ...plainToInstance(CartEntity, savedCartItem, {
+      excludeExtraneousValues: true,
+    }),
+    foodItem, // ✅ always return the version with ingredients
     totalPrice,
   };
 }
