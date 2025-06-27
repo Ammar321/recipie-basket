@@ -87,6 +87,22 @@ export class FoodItemService {
     return this.productRepo.save( product );
   }
 
+  async createProducts(createProductDtos: CreateProductDto[]) {
+  const products = createProductDtos.map((dto) =>
+    this.productRepo.create({
+      title: dto.product_title,
+      description: dto.product_description,
+      price: dto.product_price,
+      stock: dto.product_stock,
+      images: dto.product_images,
+      categoryId: dto.category_id,
+      brand: dto.product_brand,
+    }),
+  );
+
+  return this.productRepo.save(products);
+}
+
   async findAllProducts() {
     return this.productRepo.find();
   }
