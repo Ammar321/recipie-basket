@@ -19,54 +19,51 @@ export class CartService {
   ) {}
 
   async addToCart(userId: string, addToCartDto: AddToCartDto) {
-    const user = await this.userRepo.findOneBy({ id: userId });
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-
-    const foodItem = await this.foodItemRepo.findOne({
-      where: { id: addToCartDto.foodItemId },
-      relations: ['ingredients', 'ingredients.product'],
-    });
-
-    if (!foodItem) {
-      throw new NotFoundException('Food item not found');
-    }
-
-    const existingCartItem = await this.cartRepo.findOne({
-      where: {
-        user: { id: userId },
-        foodItem: { id: addToCartDto.foodItemId },
-      },
-    });
-
-    if (existingCartItem) {
-      existingCartItem.quantity += addToCartDto.quantity;
-      const updatedCartItem = await this.cartRepo.save(existingCartItem);
-      const totalPrice = foodItem.price * updatedCartItem.quantity;
-
-      return instanceToPlain({
-        ...updatedCartItem,
-        foodItem,
-        totalPrice,
-      });
-    }
-
-    const cartItem = this.cartRepo.create({
-      user,
-      foodItem,
-      quantity: addToCartDto.quantity,
-    });
-
-    const savedCartItem = await this.cartRepo.save(cartItem);
-    const totalPrice = foodItem.price * addToCartDto.quantity;
-
-    return instanceToPlain({
-      ...savedCartItem,
-      foodItem,
-      totalPrice,
-    });
+  const user = await this.userRepo.findOneBy({ id: userId });
+  if (!user) {
+    throw new NotFoundException('User not found');
   }
+
+  const foodItem = await this.foodItemRepo.findOneBy({ id: addToCartDto.foodItemId });
+  if (!foodItem) {
+    throw new NotFoundException('Food item not found');
+  }
+
+  const existingCartItem = await this.cartRepo.findOne({
+    where: {
+      user: { id: userId },
+      foodItem: { id: addToCartDto.foodItemId },
+    },
+    relations: ['foodItem'],
+  });
+
+  if (existingCartItem) {
+    existingCartItem.quantity += addToCartDto.quantity;
+    const updatedCartItem = await this.cartRepo.save(existingCartItem);
+    const totalPrice = existingCartItem.foodItem.price * existingCartItem.quantity;
+
+    return {
+      ...plainToInstance(CartEntity, updatedCartItem, { excludeExtraneousValues: true }),
+      foodItem: existingCartItem.foodItem,
+      totalPrice,
+    };
+  }
+
+  const cartItem = this.cartRepo.create({
+    user,
+    foodItem,
+    quantity: addToCartDto.quantity,
+  });
+
+  const savedCartItem = await this.cartRepo.save(cartItem);
+  const totalPrice = foodItem.price * addToCartDto.quantity;
+
+  return {
+    ...plainToInstance(CartEntity, savedCartItem, { excludeExtraneousValues: true }),
+    foodItem,
+    totalPrice,
+  };
+}
 
  async updateCartItem(userId: string, cartItemId: string, updateCartItemDto: UpdateCartItemDto) {
   const cartItem = await this.cartRepo.findOne({
@@ -112,10 +109,10 @@ export class CartService {
   async getCart(userId: string) {
   const cartItems = await this.cartRepo.find({
     where: { user: { id: userId } },
-    relations: ['foodItem'],
+    relations: ['foodItem', 'foodItem.ingredients', 'foodItem.ingredients.product'],
   });
 
-  return cartItems.map(item => {
+  const result = cartItems.map((item) => {
     const totalPrice = item.foodItem.price * item.quantity;
 
     return {
@@ -124,6 +121,8 @@ export class CartService {
       totalPrice,
     };
   });
+
+  return instanceToPlain(result);
 }
 
 
