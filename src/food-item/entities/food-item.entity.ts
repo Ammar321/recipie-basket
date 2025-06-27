@@ -43,7 +43,6 @@ export class FoodItemEntity {
   cuisineType: string;
 
   @OneToMany(() => FoodIngredientEntity, (fi) => fi.foodItem, { cascade: true })
-  @Exclude()
   ingredients: FoodIngredientEntity[];
 
   @CreateDateColumn({ name: 'created_at' })
