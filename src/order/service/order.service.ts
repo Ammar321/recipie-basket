@@ -135,7 +135,6 @@ export class OrderService {
 
     await this.orderItemRepo.save(orderItem);
 
-    // Update order total
     order.totalAmount += itemTotal;
     await this.orderRepo.save(order);
 
@@ -162,7 +161,6 @@ export class OrderService {
 
     await this.orderItemRepo.save(orderItem);
 
-    // Update order total
     const order = orderItem.order;
     order.totalAmount = order.totalAmount - oldTotal + orderItem.totalPrice;
     await this.orderRepo.save(order);

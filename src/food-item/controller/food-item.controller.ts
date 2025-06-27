@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Query } from '@nestjs/common';
+import { Controller, Post, Body, Get, Query, Param } from '@nestjs/common';
 import { FoodItemService } from '../service/food-item.service';
 import { CreateFoodItemDto } from '../dto/food-item.dto';
 import { CreateProductDto } from '../dto/product.dto';
@@ -25,5 +25,11 @@ export class FoodItemController {
   @Get('search')
   async searchFoodItems(@Query('q') query: string) {
     return this.foodItemService.searchFoodItems(query);
+  }
+
+  @Get(':id')
+  async getFoodItemById(@Param('id') id: string) {
+    const item = await this.foodItemService.getFoodItemById(id);
+    return item;
   }
 }

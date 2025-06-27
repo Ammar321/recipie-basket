@@ -102,4 +102,11 @@ export class FoodItemService {
     },
   });
 }
+
+async getFoodItemById(id: string) {
+    return this.foodItemRepo.findOne({
+      where: { id },
+      relations: ['ingredients', 'ingredients.product'],
+    });
+  }
 }
