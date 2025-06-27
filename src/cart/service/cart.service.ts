@@ -26,7 +26,7 @@ export class CartService {
 
   const foodItem = await this.foodItemRepo.findOne({
     where: { id: addToCartDto.foodItemId },
-    relations: ['ingredients'], // Fetch full food item
+    relations: ['ingredients', 'ingredients.product'], // Fetch full food item
   });
 
   if (!foodItem) {
