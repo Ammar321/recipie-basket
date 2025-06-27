@@ -1,7 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn } from 'typeorm';
 import { IsString, IsNotEmpty, IsInt, IsArray, IsNumber } from 'class-validator';
 import { FoodIngredientEntity } from './food-ingredients.entity';
-import { Exclude } from 'class-transformer';
 
 @Entity('food_item')
 export class FoodItemEntity {
