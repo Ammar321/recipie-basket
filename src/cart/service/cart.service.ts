@@ -109,7 +109,7 @@ export class CartService {
   async getCart(userId: string) {
   const cartItems = await this.cartRepo.find({
     where: { user: { id: userId } },
-    relations: ['foodItem', 'foodItem.ingredients'],
+    relations: ['foodItem', 'foodItem.ingredients', 'foodItem.ingredients.product'],
   });
 
   const result = cartItems.map((item) => {
