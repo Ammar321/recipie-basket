@@ -32,6 +32,11 @@ async createFoodItems(@Body() createDtos: CreateFoodItemDto[]) {
     return this.foodItemService.getAllFoodItems();
   }
 
+  @Get('all-products')
+  async getAllProducts() {
+    return this.foodItemService.findAllProducts();
+  }
+
   @Get('search')
   async searchFoodItems(@Query('q') query: string) {
     return this.foodItemService.searchFoodItems(query);
