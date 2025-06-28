@@ -12,6 +12,11 @@ export class FoodItemController {
     return this.foodItemService.createFoodItem( createFoodItemDto );
   }
 
+  @Post('admin/create/food-item/bulk')
+async createFoodItems(@Body() createDtos: CreateFoodItemDto[]) {
+  return this.foodItemService.createFoodItems(createDtos);
+}
+
    @Post( "admin/create/product" )
   createProduct(@Body() createProductDto: CreateProductDto) {
     return this.foodItemService.createProduct( createProductDto );

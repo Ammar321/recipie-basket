@@ -1,4 +1,4 @@
-import { Injectable, ConflictException } from '@nestjs/common';
+import { Injectable, ConflictException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
 import { FoodItemEntity } from '../entities/food-item.entity';
@@ -68,6 +68,57 @@ export class FoodItemService {
       }
       throw error;
     }
+  }
+
+   async createFoodItems(foodItemsDto: CreateFoodItemDto[]) {
+    const createdItems: FoodItemEntity[] = [];
+
+    for (const createFoodItemDto of foodItemsDto) {
+      const existingFoodItem = await this.foodItemRepo.findOne({
+        where: { name: createFoodItemDto.food_name },
+      });
+
+      if (existingFoodItem) {
+        throw new ConflictException(`Food item "${createFoodItemDto.food_name}" already exists`);
+      }
+
+      const foodItem = this.foodItemRepo.create({
+        name: createFoodItemDto.food_name,
+        price: createFoodItemDto.food_price,
+        description: createFoodItemDto.food_description,
+        images: createFoodItemDto.food_images,
+        recipe: createFoodItemDto.food_recipe,
+        prepTimeInMinutes: createFoodItemDto.prep_time_minutes,
+        servings: createFoodItemDto.servings,
+        cuisineType: createFoodItemDto.cuisine_type,
+      }) as Partial<FoodItemEntity>;
+
+      const savedFoodItem = await this.foodItemRepo.save(foodItem);
+
+      const ingredients = await Promise.all(
+        createFoodItemDto.ingredients.map(async (ingredientDto) => {
+          const product = await this.productRepo.findOneBy({ title: ingredientDto.productName });
+          if (!product) {
+            throw new Error(`Product "${ingredientDto.productName}" not found`);
+          }
+
+          return this.ingredientRepo.save({
+            quantity: ingredientDto.ingredient_quantity,
+            unit: ingredientDto.ingredient_unit,
+            product,
+            foodItem: savedFoodItem,
+          });
+        }),
+      );
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      (savedFoodItem as any).ingredients = ingredients;
+      createdItems.push(savedFoodItem);
+    }
+
+    return plainToInstance(FoodItemEntity, createdItems, {
+      excludeExtraneousValues: true,
+    });
   }
 
   async getAllFoodItems() {

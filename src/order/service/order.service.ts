@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { OrderEntity, OrderStatus } from '../entities/order.entity';
 import { OrderItemEntity } from '../entities/order-item.entity';
-import { ProductEntity } from '../../food-item/entities/product.entity';
 import { User } from '../../user/entities/user-entity';
 import { CreateOrderDto, UpdateOrderStatusDto, UpdateOrderDto, AddOrderItemDto, UpdateOrderItemDto } from '../dto/order.dto';
 import { plainToInstance } from 'class-transformer';
@@ -16,10 +15,8 @@ export class OrderService {
     private readonly orderRepo: Repository<OrderEntity>,
     @InjectRepository(OrderItemEntity)
     private readonly orderItemRepo: Repository<OrderItemEntity>,
-    @InjectRepository(ProductEntity)
-    private readonly productRepo: Repository<ProductEntity>,
     @InjectRepository(FoodItemEntity)
-    private readonly foodItemRepo: Repository<ProductEntity>,
+    private readonly foodItemRepo: Repository<FoodItemEntity>,
     @InjectRepository(User)
     private readonly userRepo: Repository<User>,
   ) {}
@@ -213,10 +210,7 @@ export class OrderService {
   }
 
   async getAllOrders() {
-      return this.orderRepo.find({
-      relations: ['orderItems', 'orderItems.foodItem', 'user'],
-      order: { createdAt: 'DESC' }
-    });
+      return this.orderRepo.find();
   }
 
   async cancelOrder(orderId: string) {
