@@ -109,7 +109,7 @@ export class OrderController {
     }
   }
 
-  @Get()
+  @Get('all')
   async getAllOrders() {
     try {
       return await this.orderService.getAllOrders();
