@@ -10,7 +10,7 @@ import { OrderItemEntity } from "src/order/entities/order-item.entity";
 export default registerAs("database", () => ({
   type: "postgres",
   host: process.env.DB_HOST || "switchback.proxy.rlwy.net",
-  port: parseInt(process.env.DB_PORT ?? "8080", 10),
+  port: parseInt(process.env.DB_PORT ?? "46989", 10),
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
