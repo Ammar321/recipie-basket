@@ -8,6 +8,7 @@ import { UserModule } from "./user/user-module";
 import { FoodItemModule } from "./food-item/food-item.module";
 import { CartModule } from "./cart/cart.module";
 import { OrderModule } from "./order/order.module";
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { OrderModule } from "./order/order.module";
     FoodItemModule,
     CartModule,
     OrderModule,
+    HealthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
